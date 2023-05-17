@@ -1,32 +1,18 @@
-
 #define ALPHA_PIN 3
 
 // y has diode connected to alpha
 #define X_PIN 6
 #define Y_PIN 5
 
-// voltages at pwm 255
-#define X_MAX 2.85
-#define Y_MAX 2.48
-
-// resistor values (R2 is across cap)
-#define R1 1e3
-#define R2 100e3
-
-// capacitor value
-#define CAP 1e-6
-
-// characteristic time of RC circuit
-static double tau = (R1*R2*CAP)/(R1 + R2);
+#define TIMING_PIN 10
 
 // pwm bounds (lower bound needs to be enough to overcome diode)
 #define LOWER_BOUND 100 
-#define UPPER_BOUND 255
+#define UPPER_BOUND 200
 
 #define DIFF ((float)(UPPER_BOUND-LOWER_BOUND))
 
 #define toScreenVal(f) ((int)(DIFF*(f)) + LOWER_BOUND)
-
 
 void setup() {
     //pinMode(LED_BUILTIN, OUTPUT);
@@ -42,7 +28,10 @@ void setup() {
     pinMode(X_PIN, OUTPUT);
     pinMode(Y_PIN, OUTPUT);
 
+    pinMode(TIMING_PIN, OUTPUT);
+
     analogWrite(ALPHA_PIN, 0);
+    digitalWrite(TIMING_PIN, 0);
 }
 
 void testCircle(float phase1, float phase2, float mult1, float mult2){
@@ -62,6 +51,7 @@ void testCircle(float phase1, float phase2, float mult1, float mult2){
         t = M_PI*2*(float)i*stepsInv ;
         x = toScreenVal( 0.5*(sin(mult1*t+phase1)+1) );
         y = toScreenVal( 0.5*(sin(mult2*t+phase2)+1) );
+        // smoothMoveBeam(x, y, 1);
 
 
         // beam cutting test
@@ -217,15 +207,24 @@ void printFloatln(float x){
     Serial.println(buff);
 }
 
+void testSmoothMoveBeam(int tauFactor){
+    smoothMoveBeam(0, 0,     tauFactor);
+    smoothMoveBeam(0.5, 0.5, tauFactor);
+    smoothMoveBeam(1., 0.,   tauFactor);
+    smoothMoveBeam(0., 1.,   tauFactor);
+    smoothMoveBeam(1., 1.,   tauFactor);
+}
+
 
 void loop() {
-    Serial.println("================");
-    printFloatln(R1);
-    printFloatln(R2);
-    printFloatln(CAP);
-    printFloatln(tau);
-    // testRotatingSinusoid();
-    // snakeScan();
+    testSmoothMoveBeam(3);
+    return;
+
+    flickBeam(0, 0);
+    flickBeam(0.5, 0.5);
+    flickBeam(1., 0.);
+    flickBeam(0., 1.);
+    flickBeam(1., 1.);
     return;
 
     analogWrite(X_PIN, 0);
