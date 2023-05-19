@@ -7,8 +7,8 @@
 #define TIMING_PIN 10
 
 // pwm bounds (lower bound needs to be enough to overcome diode)
-#define LOWER_BOUND 100 
-#define UPPER_BOUND 200
+#define LOWER_BOUND 80
+#define UPPER_BOUND 185
 
 #define DIFF ((float)(UPPER_BOUND-LOWER_BOUND))
 
@@ -66,130 +66,6 @@ void testCircle(float phase1, float phase2, float mult1, float mult2){
     }
 }
 
-int z[] = {
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,1,0,0,0,0,0,0,0,
-    0,0,1,0,0,0,0,0,0,0,
-    0,0,1,0,0,0,0,0,0,0,
-    0,0,1,0,0,0,0,0,0,0,
-    0,0,1,0,0,0,0,0,0,0,
-    0,0,1,0,0,0,0,0,0,0,
-    0,0,1,1,1,1,1,1,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-};
-
-void testScan(){
-    int steps = 15;
-    float factor = 255./steps;
-    for(int i = 0; i < steps; i++){
-
-        analogWrite(ALPHA_PIN, 255);
-        analogWrite(Y_PIN, LOWER_BOUND);
-        analogWrite(X_PIN, toScreenVal((float)i/steps));
-        delay(5);
-
-        for(int j = 0; j < steps; j++){
-            analogWrite(ALPHA_PIN, 255);
-            analogWrite(Y_PIN, toScreenVal((float)j/steps));
-            //if (z[i+steps*j] == 1){
-                analogWrite(ALPHA_PIN, 0);
-            //}
-            //delay(10);
-        }
-    }
-
-    analogWrite(ALPHA_PIN, 255);
-    analogWrite(X_PIN, LOWER_BOUND);
-    analogWrite(Y_PIN, LOWER_BOUND);
-    delay(200);
-}
-
-
-void drawPixel(float x, float y){
-    // analogWrite(ALPHA_PIN, 255);
-    analogWrite(X_PIN, toScreenVal(x));
-    analogWrite(Y_PIN, toScreenVal(y));
-    delay(50);
-    // delay(2);
-    // analogWrite(ALPHA_PIN, 0);
-}
-
-void snakeScan(){
-    // must be even and greater than 2
-    int steps = 8;
-    float stepsInv = 1./(steps-1);
-    int i;
-    int j;
-
-    // first layer
-    for (i = 0; i < steps; i++){
-        drawPixel(i*stepsInv, 0);
-    }
-
-
-    // snake up
-    for (j = 1; j < steps-1; j++){
-        if(j%2==0){
-            // forward
-            for(i=steps/2; i<steps; i++){
-                drawPixel(i*stepsInv, j*stepsInv);
-            }
-        }
-        else {
-            // backwards
-            for(i=steps-1; i >= steps/2; i--){
-                drawPixel(i*stepsInv, j*stepsInv);
-            }
-        }
-    }
-
-
-    // top layer
-    for (i=steps-1; i >= 0; i--){
-        drawPixel(i*stepsInv, 1);
-    }
-
-    // snake down
-    for (j=steps-2; j >= 1; j--){
-        if(j%2==0){
-            // forward
-            for(i=0; i < steps/2; i++){
-                drawPixel(i*stepsInv, j*stepsInv);
-            }
-        }
-        else {
-            // backwards
-            for(i = steps/2-1; i >= 0; i--){
-                drawPixel(i*stepsInv, j*stepsInv);
-            }
-        }
-    }
-}
-
-void testLine(){
-    // reset to zero
-    analogWrite(ALPHA_PIN, 255);
-    analogWrite(Y_PIN, toScreenVal(0));
-    delay(100);
-
-    // draw line to 85
-    analogWrite(ALPHA_PIN, 0);
-    analogWrite(Y_PIN, toScreenVal(1./3.));
-    delay(50);
-
-    // move to 170
-    analogWrite(ALPHA_PIN, 255);
-    analogWrite(Y_PIN, toScreenVal(2./3.));
-    delay(50);
-
-    // draw line to 255
-    analogWrite(ALPHA_PIN, 0);
-    analogWrite(Y_PIN, toScreenVal(1));
-    delay(50);
-}
-
 void testRotatingSinusoid(){
     for(float i = 0.; i < 2*M_PI; i+=0.05){
         testCircle(0, M_PI_2, 2, 3);
@@ -214,17 +90,45 @@ void testSmoothMoveBeam(int tauFactor){
     smoothMoveBeam(0., 1.,   tauFactor);
     smoothMoveBeam(1., 1.,   tauFactor);
 }
+void testSmoothMoveBeamSquare(int tauFactor){
+    smoothMoveBeam(0, 0,     tauFactor);
+    smoothMoveBeam(1., 0.,   tauFactor);
+    smoothMoveBeam(1., 1.,   tauFactor);
+    smoothMoveBeam(0., 1.,   tauFactor);
+}
+
+void testSmoothMoveBeamPong(){
+    analogWrite(ALPHA_PIN, 255);
+    smoothMoveBeam(0, 0.1, 2);
+    delayMicroseconds(100);
+    analogWrite(ALPHA_PIN, 0);
+    smoothMoveBeam(0, 0.3, 2);
+
+
+    analogWrite(ALPHA_PIN, 255);
+    smoothMoveBeam(0.3, 0.4, 2);
+    analogWrite(ALPHA_PIN, 0);
+    smoothMoveBeam(0.32, 0.43, 2);
+
+    analogWrite(ALPHA_PIN, 255);
+    smoothMoveBeam(1, 0.7, 2);
+    analogWrite(ALPHA_PIN, 0);
+    smoothMoveBeam(1, 0.9, 2);
+}
 
 
 void loop() {
-    testSmoothMoveBeam(3);
+    // testSmoothMoveBeam(2);
+    testSmoothMoveBeamPong();
+    //testFlickBeam();
+    // testFlickBeamSquare();
+    testSmoothMoveBeamSquare(2);
     return;
 
-    flickBeam(0, 0);
-    flickBeam(0.5, 0.5);
-    flickBeam(1., 0.);
-    flickBeam(0., 1.);
-    flickBeam(1., 1.);
+    for(int i = 2; i < 10; i++){
+        testSmoothMoveBeamSquare(i);
+        //testSmoothMoveBeam(i);
+    }
     return;
 
     analogWrite(X_PIN, 0);
