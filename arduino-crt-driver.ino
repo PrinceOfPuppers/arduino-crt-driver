@@ -13,6 +13,7 @@
 #define DIFF ((float)(UPPER_BOUND-LOWER_BOUND))
 
 #define toScreenVal(f) ((int)(DIFF*(f)) + LOWER_BOUND)
+#define smoothMoveBeam(xf, yf, time) _smoothMoveBeam(toScreenVal(xf), toScreenVal(yf), time)
 
 void setup() {
     //pinMode(LED_BUILTIN, OUTPUT);
@@ -119,6 +120,11 @@ void testSmoothMoveBeamPong(){
 
 void loop() {
     // testSmoothMoveBeam(2);
+    drawNum(12345, 0.2, 0, 0);
+    // drawNum(6789, 0.2, 0, 0.3);
+    //drawNum(67890, 0.2, 0, 0.3);
+    return;
+
     testSmoothMoveBeamPong();
     //testFlickBeam();
     // testFlickBeamSquare();
