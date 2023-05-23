@@ -96,6 +96,7 @@ void testSmoothMoveBeamSquare(int tauFactor){
     smoothMoveBeam(1., 0.,   tauFactor);
     smoothMoveBeam(1., 1.,   tauFactor);
     smoothMoveBeam(0., 1.,   tauFactor);
+    smoothMoveBeam(0, 0,     tauFactor);
 }
 
 void testSmoothMoveBeamPong(){
@@ -119,31 +120,11 @@ void testSmoothMoveBeamPong(){
 
 
 void loop() {
-    // testSmoothMoveBeam(2);
-    drawNum(12345, 0.2, 0, 0);
-    // drawNum(6789, 0.2, 0, 0.3);
-    //drawNum(67890, 0.2, 0, 0.3);
+    // analogWrite(ALPHA_PIN, 0);
+    // testSmoothMoveBeamSquare(2);
+    // analogWrite(ALPHA_PIN, 255);
+    // drawNum(12345, 0.2, 0, 0);
+    // renderPong();
+    playPong();
     return;
-
-    testSmoothMoveBeamPong();
-    //testFlickBeam();
-    // testFlickBeamSquare();
-    testSmoothMoveBeamSquare(2);
-    return;
-
-    for(int i = 2; i < 10; i++){
-        testSmoothMoveBeamSquare(i);
-        //testSmoothMoveBeam(i);
-    }
-    return;
-
-    analogWrite(X_PIN, 0);
-    analogWrite(Y_PIN, 0);
-    delay(100000);
-    analogWrite(X_PIN, 128);
-    analogWrite(Y_PIN, 128);
-    delay(100000);
-    analogWrite(X_PIN, 255);
-    analogWrite(Y_PIN, 255);
-    delay(100000);
 }
