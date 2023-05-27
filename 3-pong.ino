@@ -1,3 +1,11 @@
+// PINOUT
+#define JS_PIN_1 A0
+#define JS_PIN_2 A1
+
+# define HALF_JS_RANGE 511.5
+
+
+
 #define PADDLE_RADIUS_Y 0.1
 
 // only for collision
@@ -30,10 +38,6 @@ static float ballSpeed = 0.025;
 static float ball[2] = {0.5, 0.5};
 static float ballVel[2] = {0.5, 0.5};
 
-#define JS_PIN_1 A0
-#define JS_PIN_2 A1
-
-# define HALF_JS_RANGE 511.5
 
 static int js_1_zero = 0;
 static int js_2_zero = 0;

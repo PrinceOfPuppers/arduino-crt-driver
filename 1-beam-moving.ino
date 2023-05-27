@@ -35,7 +35,7 @@ static int currentY = 0;
 #define smoothMoveBeam(xf, yf, time) _smoothMoveBeam(toScreenVal(xf), toScreenVal(yf), time)
 
 // time is factor of tau
-// equation is V_pwm(t) = V_i + (t+tau)V_vel
+// equation is $$ V(t) = {(V_i - V_{pwm}) e^{-t/\tau} + V_{pwm}} $$
 void _smoothMoveBeam(float finalX, float finalY, float time){
     // internal units are pwmNumber (0-255) for potential and tau/beamSampleSpeed for time
     int steps = (int)(time*beamSampleSpeed);
