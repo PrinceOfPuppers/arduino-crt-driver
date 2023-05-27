@@ -15,7 +15,7 @@ Create the DAC circuit as shown in the schematic below and hook it up to the D5 
 <br clear="left"/>
 <br clear="left"/>
 
-Hook the Joysticks up directly to pin A0 and A1 directly, The final result should look like this mess:
+Hook the Joysticks up to pin A0 and A1 directly and hook 2 oscilloscope channels in x/y mode to D5 Signal and D6 signal in the schematic. The final result should look like this mess:
 
 <img align="left" height="300" src="images/full-setup.jpg">
 <br clear="left"/>
