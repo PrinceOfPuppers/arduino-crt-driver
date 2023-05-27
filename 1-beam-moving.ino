@@ -24,6 +24,16 @@ static int beamStepDelay = (int)(1e6*tau/beamSampleSpeed) - BEAM_MOVE_CALCULATIO
 static int currentX = 0;
 static int currentY = 0;
 
+
+// pwm bounds (lower bound needs to be enough to overcome diode)
+#define LOWER_BOUND 80
+#define UPPER_BOUND 185
+
+#define DIFF ((float)(UPPER_BOUND-LOWER_BOUND))
+
+#define toScreenVal(f) ((int)(DIFF*(f)) + LOWER_BOUND)
+#define smoothMoveBeam(xf, yf, time) _smoothMoveBeam(toScreenVal(xf), toScreenVal(yf), time)
+
 // time is factor of tau
 // equation is V_pwm(t) = V_i + (t+tau)V_vel
 void _smoothMoveBeam(float finalX, float finalY, float time){

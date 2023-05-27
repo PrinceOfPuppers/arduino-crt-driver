@@ -13,3 +13,15 @@ int getDigit(size_t num, int numDigits, int i){
     return (num/mask)%10;
 }
 
+void printFloat(float x){
+    char buff[32];
+    dtostre(x, buff, 5, 0);
+    Serial.print(buff);
+}
+
+void printFloatln(float x){
+    char buff[32];
+    dtostre(x, buff, 7, 0);
+    Serial.println(buff);
+}
+
