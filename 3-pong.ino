@@ -1,19 +1,18 @@
-#define paddleRadiusY 0.1
+#define PADDLE_RADIUS_Y 0.1
 
 // only for collision
-#define paddleRadiusX 0.04
+#define PADDLE_RADIUS_X 0.04
 #define PADDLE_Y_HITBOX_FACTOR 1.3
 
-#define paddleSpeed 0.035
+#define PADDLE_SPEED 0.035
 
 static size_t p1Score = 0;
 static size_t p2Score = 0;
 
-
-#define p1X 0.05
+#define P1_X 0.05
 static float p1Y = 0.5;
 
-#define p2X 0.95
+#define P2_X 0.95
 static float p2Y = 0.5;
 
 #define SCORE_SIZE 0.4
@@ -24,8 +23,8 @@ static float p2Y = 0.5;
 #define MOVE_SPEED 15
 #define BALL_TAIL 1.7
 
-#define ballSpeedInc 0.002
-#define ballSpeedCap 0.04
+#define BALL_SPEED_INC 0.002
+#define BALL_SPEED_CAP 0.04
 static float ballSpeed = 0.025;
 
 static float ball[2] = {0.5, 0.5};
@@ -62,16 +61,16 @@ void newRound(int first){
     ballVel[1] = ballSpeed*cos(theta);
 
     if (!first){
-        ballSpeed += ballSpeedInc;
-        ballSpeed = ballSpeed > ballSpeedCap ? ballSpeedCap : ballSpeed;
+        ballSpeed += BALL_SPEED_INC;
+        ballSpeed = ballSpeed > BALL_SPEED_CAP ? BALL_SPEED_CAP : ballSpeed;
         drawScore();
     }
 
     for(int i = 0; i < ROUND_START_FRAMES; i++){
         renderPong();
         // control
-        p1Y+=paddleSpeed*readJoystick(JS_PIN_1, js_1_zero);
-        p2Y+=paddleSpeed*readJoystick(JS_PIN_2, js_2_zero);
+        p1Y+=PADDLE_SPEED*readJoystick(JS_PIN_1, js_1_zero);
+        p2Y+=PADDLE_SPEED*readJoystick(JS_PIN_2, js_2_zero);
     }
 
 }
@@ -86,8 +85,8 @@ void setupPong(){
 #define drawBeam(x, y) analogWrite(ALPHA_PIN, 0); smoothMoveBeamSpeed(x, y, DRAW_SPEED); analogWrite(ALPHA_PIN, 255)
 
 void drawPaddle(float px, float py){
-    moveBeam(px, py- paddleRadiusY);
-    drawBeam(px, py+paddleRadiusY);
+    moveBeam(px, py- PADDLE_RADIUS_Y);
+    drawBeam(px, py+PADDLE_RADIUS_Y);
 }
 
 
@@ -106,17 +105,17 @@ void drawScore(){
 
 
 void renderPong(){
-    drawPaddle(p1X, p1Y);
+    drawPaddle(P1_X, p1Y);
     // drawLine();
     drawBall(ball[0], ball[1], ballVel[0], ballVel[1]);
-    drawPaddle(p2X, p2Y);
+    drawPaddle(P2_X, p2Y);
 }
 
 void ballPaddleHit(int paddleNum, float px, float dy){
     int paddleFactor = -2*(paddleNum == 2) + 1;
-    ball[0] = px + paddleFactor*paddleRadiusX;
+    ball[0] = px + paddleFactor*PADDLE_RADIUS_X;
     
-    float theta = M_PI*(0.5 - dy/(4.*paddleRadiusY));
+    float theta = M_PI*(0.5 - dy/(4.*PADDLE_RADIUS_Y));
     ballVel[0] = paddleFactor * ballSpeed*sin(theta);
     ballVel[1] = ballSpeed*cos(theta);
 }
@@ -129,8 +128,8 @@ void stepPong(){
     ball[1] += ballVel[1];
 
     // control
-    p1Y+=paddleSpeed*readJoystick(JS_PIN_1, js_1_zero);
-    p2Y+=paddleSpeed*readJoystick(JS_PIN_2, js_2_zero);
+    p1Y+=PADDLE_SPEED*readJoystick(JS_PIN_1, js_1_zero);
+    p2Y+=PADDLE_SPEED*readJoystick(JS_PIN_2, js_2_zero);
 
     // y wall hitting
     if(ball[0] < 0) {
@@ -157,24 +156,24 @@ void stepPong(){
     }
 
     // paddle hitting
-    int closeToPaddle1 = abs(ball[0] - p1X) < paddleRadiusX;
-    int closeToPaddle2 = abs(ball[0] - p2X) < paddleRadiusX;
+    int closeToPaddle1 = abs(ball[0] - P1_X) < PADDLE_RADIUS_X;
+    int closeToPaddle2 = abs(ball[0] - P2_X) < PADDLE_RADIUS_X;
 
     if(closeToPaddle1){
         float dy = ball[1] - p1Y;
 
-        if(abs(dy) < paddleRadiusY*PADDLE_Y_HITBOX_FACTOR){
+        if(abs(dy) < PADDLE_RADIUS_Y*PADDLE_Y_HITBOX_FACTOR){
             // paddle 1 hit!
-            ballPaddleHit(1, p1X, dy);
+            ballPaddleHit(1, P1_X, dy);
         }
     }
 
     if(closeToPaddle2){
         float dy = ball[1] - p2Y;
 
-        if(abs(dy) < paddleRadiusY*PADDLE_Y_HITBOX_FACTOR){
+        if(abs(dy) < PADDLE_RADIUS_Y*PADDLE_Y_HITBOX_FACTOR){
             // paddle 2 hit!
-            ballPaddleHit(2, p2X, dy);
+            ballPaddleHit(2, P2_X, dy);
         }
 
     }

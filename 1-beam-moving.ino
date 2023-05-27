@@ -12,7 +12,7 @@
 static float tau = TAU_TRIM*(R1*R2*CAP)/(R1 + R2);
 // static float tau = (R1*CAP);
 
-#define xBias 0.965
+#define X_BIAS 0.965
 
 #define MAX_SMOOTH_BEAM_SPEED 15
 
@@ -40,7 +40,7 @@ void _smoothMoveBeam(float finalX, float finalY, float time){
     // internal units are pwmNumber (0-255) for potential and tau/beamSampleSpeed for time
     int steps = (int)(time*beamSampleSpeed);
 
-    float velX = (float)(finalX - currentX)/( (float)beamSampleSpeed*time )*xBias;
+    float velX = (float)(finalX - currentX)/( (float)beamSampleSpeed*time )*X_BIAS;
     float velY = (float)(finalY - currentY)/( (float)beamSampleSpeed*time );
     
     float x = currentX + velX*beamSampleSpeed;
