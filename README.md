@@ -12,12 +12,14 @@ Create the DAC circuit as shown in the schematic below and hook it up to the D5 
 
 <img align="left" height="300" src="images/dac-schematic.jpg">
 <img align="left" height="300" src="images/board.jpg">
+<br clear="left"/>
+<br clear="left"/>
+
+Hook the Joysticks up directly to pin A0 and A1 directly, The final result should look like this mess:
+
 <img align="left" height="300" src="images/full-setup.jpg">
-
 <br clear="left"/>
 <br clear="left"/>
-
-Hook the Joysticks up directly to pin A0 and A1 directly.
 
 To flash and run the project on Linux, use:
 ``` 
