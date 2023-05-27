@@ -40,6 +40,8 @@ Where:
 
 $$ \tau={{R_1 R_2} \over {R_1+R_2}} C $$
 
+And $R_1$ is the 1K resistor between the PWM signal and the capacitor, and $R_2$ is the 100K pull down resistor which leads to ground. 
+
 From here we can derive everything we need to know, such as how to move the beam with a desired speed (hint: take the derivative with respect to t, and assume everything is constant). 
 
 To make calculations faster on the Arduino, measure time in factors of tau and voltage in Arduino pin setting (0-255), for an example see `_smoothMoveBeam(x,y,t)` in `1-beam-moving.ino` which uses internal time units of tau/sample_speed to drastically simplify the calculations.
