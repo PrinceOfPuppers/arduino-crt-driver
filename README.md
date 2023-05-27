@@ -4,7 +4,7 @@
 > Hacking an Arduino to control an oscilloscope like a CRT (to play Pong)
 - [SETUP](#SETUP)
 - [ABOUT](#ABOUT)
-- [FUTURE_IDEAS](#FUTURE_IDEAS)
+- [FUTURE IDEAS](#FUTURE-IDEAS)
 
 
 # SETUP
